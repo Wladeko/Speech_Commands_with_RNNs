@@ -1,2 +1,6 @@
 wandb
 einops
+tensorflow 
+tensorflow_datasets
+pyunpack
+patool
