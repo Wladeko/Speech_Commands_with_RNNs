@@ -8,7 +8,7 @@ data_path = 'data/train/audio'
 data_dir = pathlib.Path(data_path)
 if not data_dir.exists():
   tf.keras.utils.get_file(
-      origin="https://storage.googleapis.com/kaggle-competitions-data/kaggle-v2/7634/46676/bundle/archive.zip?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1682110210&Signature=Hwt%2B9QK%2FUyOlKBP3dmVKYYdoBuUUThp1KL%2F447Z%2B6vvmj0yoy2keUN7foIQIDADUp%2B4jckXpQILZleqdMPMz8aUdEGCqqnoX%2FAtLvZUO9kPE%2F%2BA5f54R86lVvFwAe%2Bcceu19SCVjeNMuLjUJbgD9ADZNqT7%2B60Z6qyaU%2Bd72u3ufOrAv%2F5OVlgGSelTw5fZRZvn2XQgALULKMT4pBgEvZa6aSpCNxpqwSuzZdGfhh90mbUbdvZ5wkRtuuS0njjs5Z2cGE6ckYI6NRNpkU%2F%2FXHbi5x6%2BxBcFrjvjMs6jYqC%2F2%2BXTK%2BfPU7GPRM82TBsefGWfQ1sycsdo83QnvQSlOZA%3D%3D&response-content-disposition=attachment%3B+filename%3Dtensorflow-speech-recognition-challenge.zip",
+      origin="https://storage.googleapis.com/kagglesdsdata/competitions/7634/46676/train.7z?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1682110428&Signature=cq%2FPQDH8watXYiVGtl2xPd0cRyHkS3F4QyPYFhn6GtyZ85MJueaOUnWhcn1lzww%2BCkwbUvDXhrpqJ4EYmh%2F6tsicinc%2FC08ZyvZ1SkPDC26yQvSGsLvjuX5PVeNT2ucFL1WaFUlXsyHX9KbqgsOeNgqO5nzsLAyJLTyLDrTKsQmxq4v4r8ryAgrXB4NZCQR%2BYeZJEU8A2oWvmkHo9vtaa7xPtSmqs%2Flm2bKvQq3Fjcl8r8%2BTFJwjBDwgfSFKzpD8QJ4OXOh2x%2FEDVptrJAbQ5LiH5K8JydEnWBtyBLUHxTJg%2Bl5pH%2Flku1votcwMMFpHFPZl3u5PopYfq%2Fye6%2FxfwA%3D%3D&response-content-disposition=attachment%3B+filename%3Dtrain.7z",
       cache_dir='.', cache_subdir='data')
   
 # Moving validation files
