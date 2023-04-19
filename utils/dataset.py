@@ -141,4 +141,5 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
 
 
 if __name__ == "__main__":
-    make_train_dataset()
+    dataset = make_train_dataset()
+    print(dataset)
