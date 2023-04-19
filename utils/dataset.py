@@ -98,12 +98,10 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     silence_label = silence_label.reshape(-1,1)
 
     wav_vals = np.reshape(wav_vals, (-1, sample_rate))
-    noised_wav = np.reshape(noised_wav, (-1, sample_rate))
     unknown = np.reshape(unknown, (-1, sample_rate))
     silence_wav = np.reshape(silence_wav, (-1, sample_rate))
 
     print(wav_vals.shape)
-    print(noised_wav.shape)
     print(unknown.shape)
     print(silence_wav.shape)
 
@@ -111,7 +109,6 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     print(unknown_label.shape)
     print(silence_label.shape)
 
-    wav_vals = np.concatenate((wav_vals, noised_wav), axis = 0)
     wav_vals = np.concatenate((wav_vals, unknown), axis = 0)
     wav_vals = np.concatenate((wav_vals, silence_wav), axis = 0)
 
