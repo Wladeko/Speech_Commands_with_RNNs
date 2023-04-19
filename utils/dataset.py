@@ -53,26 +53,26 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     wav_all = np.reshape(np.delete(all_wav,1,1),(len(all_wav)))
     label_all = [i for i in np.delete(all_wav,0,1).tolist()]
 
-    max_ratio = 0.1
-    noised_wav = []
-    delete_index = []
-    for i in range(augment):
-        noise = get_one_noise(background_noise, i)
-        for i, s in enumerate(wav_all):
-            if len(s) != sample_rate:
-                delete_index.append(i)
-                continue
-            s = s + (max_ratio * noise)
-            noised_wav.append(s)
-    np.delete(wav_all, delete_index)
-    np.delete(label_all, delete_index)
+    # max_ratio = 0.1
+    # noised_wav = []
+    # delete_index = []
+    # for i in range(augment):
+    #     noise = get_one_noise(background_noise, i)
+    #     for i, s in enumerate(wav_all):
+    #         if len(s) != sample_rate:
+    #             delete_index.append(i)
+    #             continue
+    #         s = s + (max_ratio * noise)
+    #         noised_wav.append(s)
+    # np.delete(wav_all, delete_index)
+    # np.delete(label_all, delete_index)
     
     wav_vals = np.array([x for x in wav_all])
-    label_vals = [x for x in label_all]
+    label_vals = np.array([x for x in label_all])
 
-    labels = copy.deepcopy(label_vals)
-    for _ in range(augment):
-        label_vals = np.concatenate((label_vals, labels), axis = 0)
+    # labels = copy.deepcopy(label_vals)
+    # for _ in range(augment):
+    #     label_vals = np.concatenate((label_vals, labels), axis = 0)
     label_vals = label_vals.reshape(-1,1)
 
     unknown = unknown_wav
@@ -102,14 +102,14 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     unknown = np.reshape(unknown, (-1, sample_rate))
     silence_wav = np.reshape(silence_wav, (-1, sample_rate))
 
-    # print(wav_vals.shape)
-    # print(noised_wav.shape)
-    # print(unknown.shape)
-    # print(silence_wav.shape)
+    print(wav_vals.shape)
+    print(noised_wav.shape)
+    print(unknown.shape)
+    print(silence_wav.shape)
 
-    # print(label_vals.shape)
-    # print(unknown_label.shape)
-    # print(silence_label.shape)
+    print(label_vals.shape)
+    print(unknown_label.shape)
+    print(silence_label.shape)
 
     wav_vals = np.concatenate((wav_vals, noised_wav), axis = 0)
     wav_vals = np.concatenate((wav_vals, unknown), axis = 0)
