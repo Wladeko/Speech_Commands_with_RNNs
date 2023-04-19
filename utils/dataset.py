@@ -14,7 +14,7 @@ def get_one_noise(background_noise, noise_num = 0, sample_rate=16000):
     start_idx = random.randint(0, len(selected_noise)- 1 - sample_rate)
     return selected_noise[start_idx:(start_idx + sample_rate)]
 
-def make_dataset(path='./data/train/audio/', sample_rate=16000):
+def make_dataset(path='./data/train/audio/', sample_rate=16000, augment = 2):
     train_audio_path = path
     dirs = [f for f in os.listdir(train_audio_path) if isdir(join(train_audio_path, f))]
     dirs.sort()
@@ -53,10 +53,9 @@ def make_dataset(path='./data/train/audio/', sample_rate=16000):
 
     max_ratio = 0.1
     noised_wav = []
-    augment = 1
     delete_index = []
     for i in range(augment):
-        noise = get_one_noise(i)
+        noise = get_one_noise(background_noise, i)
         for i, s in enumerate(wav_all):
             if len(s) != sample_rate:
                 delete_index.append(i)
