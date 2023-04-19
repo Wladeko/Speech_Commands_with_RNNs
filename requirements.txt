@@ -2,3 +2,5 @@ wandb
 einops
 pyunpack
 patool
+numpy
+scikit-learn
