@@ -35,7 +35,7 @@ def get_one_noise(background_noise, noise_num = 0, sample_rate=16000):
     start_idx = random.randint(0, len(selected_noise)- 1 - sample_rate)
     return selected_noise[start_idx:(start_idx + sample_rate)]
 
-def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 0, seed=0, batch_size=128, convert_to_image=False):
+def make_train_dataset(path='./data/train/audio/', sample_rate=16000, unknown_silence_samples = 2000, seed=0, batch_size=128, convert_to_image=False):
     train_audio_path = path
     dirs = [f for f in os.listdir(train_audio_path) if isdir(join(train_audio_path, f))]
     dirs.sort()
@@ -79,9 +79,9 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     unknown = unknown_wav
     np.random.shuffle(unknown_wav)
     unknown = np.array(unknown)
-    unknown = unknown[:2000*(augment+1)]
-    unknown_label = np.array(['unknown' for _ in range(2000*(augment+1))])
-    unknown_label = unknown_label.reshape(2000*(augment+1),1)
+    unknown = unknown[:unknown_silence_samples]
+    unknown_label = np.array(['unknown' for _ in range(unknown_silence_samples)])
+    unknown_label = unknown_label.reshape(unknown_silence_samples,1)
 
     delete_index = []
     for i,w in enumerate(unknown):
@@ -90,9 +90,9 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     unknown = np.delete(unknown, delete_index, axis=0)
 
     silence_wav = []
-    num_wav = (2000*(augment+1))//len(background_noise)
+    num_wav = (unknown_silence_samples)//len(background_noise)
     for i, _ in enumerate(background_noise):
-        for _ in range((2000*(augment+1))//len(background_noise)):
+        for _ in range(unknown_silence_samples//len(background_noise)):
             silence_wav.append(get_one_noise(background_noise, i))
     silence_wav = np.array(silence_wav)
     silence_label = np.array(['silence' for _ in range(num_wav*len(background_noise))])
@@ -129,11 +129,11 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=16000, augment = 
     if convert_to_image:
         train_data = convert_wav_to_image(pd.dataframe(train_data))
 
-    dataset = tf.data.Dataset.from_tensor_slices((train_data, train_labels)).shuffle(buffer_size=len(train_labels), seed=0, reshuffle_each_iteration=True).batch(batch_size=128)
+    dataset = tf.data.Dataset.from_tensor_slices((train_data, train_labels)).shuffle(buffer_size=len(train_labels), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
     return dataset
 
 
-def make_val_dataset(path='./data/train/audio/', sample_rate=16000, augment = 0, convert_to_image=False):
+def make_val_dataset(path='./data/train/audio/', unknown_silence_samples = 2000, sample_rate=16000, convert_to_image=False, seed=0, batch_size=128):
     train_audio_path = path
     dirs = [f for f in os.listdir(train_audio_path) if isdir(join(train_audio_path, f))]
     dirs.sort()
@@ -206,7 +206,7 @@ def make_val_dataset(path='./data/train/audio/', sample_rate=16000, augment = 0,
     if convert_to_image:
         train_data = convert_wav_to_image(pd.dataframe(train_data))
 
-    dataset = tf.data.Dataset.from_tensor_slices((train_data, train_labels))
+    dataset = tf.data.Dataset.from_tensor_slices((train_data, train_labels)).shuffle(buffer_size=len(train_labels), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
     return dataset
 
 if __name__ == "__main__":
