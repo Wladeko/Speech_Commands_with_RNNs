@@ -109,7 +109,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     selected_label = np.array(temp).reshape(-1,1)
 
     if convert_to_image:
-        selected_loaded = convert_wav_to_image(pd.dataframe(selected_loaded))
+        selected_loaded = convert_wav_to_image(pd.DataFrame(selected_loaded))
 
     # selected_label = tf.keras.utils.to_categorical(selected_label, num_classes = 12)
     X, y = shuffle(selected_loaded, selected_label)
@@ -173,7 +173,7 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
     all_label = np.array(temp).reshape(-1,1)
 
     if convert_to_image:
-        all_loaded = convert_wav_to_image(pd.dataframe(all_loaded))
+        all_loaded = convert_wav_to_image(pd.DataFrame(all_loaded))
 
     # all_label = tf.keras.utils.to_categorical(all_label, num_classes = 12)
     X, y = shuffle(all_loaded, all_label)

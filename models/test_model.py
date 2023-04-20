@@ -6,7 +6,7 @@ class TestGRU(tf.keras.Model):
     def __init__(self, input_shape, output_nodes, dropout):
         super().__init__()
         self.input1 = InputLayer(input_shape=input_shape)
-        self.reshape1 = Reshape((input_shape, 1))
+        # self.reshape1 = Reshape((input_shape, 1))
         self.normalization = BatchNormalization()
         self.GRU1 = GRU(128, return_sequences=True)
         self.dropout1 = Dropout(dropout)
@@ -20,7 +20,7 @@ class TestGRU(tf.keras.Model):
 
     def call(self, inputs, training=False):
         x = self.input1(inputs)
-        x = self.reshape1(x)
+        # x = self.reshape1(x)
         x = self.normalization(x)
         x = self.GRU1(x)
         if training:
