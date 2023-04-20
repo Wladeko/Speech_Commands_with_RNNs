@@ -21,7 +21,7 @@ def audio2mel(path):
         offset = padding // 2 
         y = np.pad(y, (offset, sr - len(y) - offset), 'constant')
     mel = librosa.feature.melspectrogram(y=y, sr=sr)
-    return librosa.power_to_db(mel, ref= np.max).astype(np.float) 
+    return librosa.power_to_db(mel, ref= np.max).astype(np.float).transpose()
 
 def convert_wav_to_image(df):
     X = []
@@ -90,6 +90,9 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
         if len(samples) != sample_rate:
             to_delete.append(i)
             continue
+        else:
+            samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
+            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose()
         selected_loaded.append(samples)
 
     selected_label = [j for i, j in enumerate(selected_label) if i not in to_delete]
@@ -108,8 +111,8 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
         temp.append(label_value[l])
     selected_label = np.array(temp).reshape(-1,1)
 
-    if convert_to_image:
-        selected_loaded = convert_wav_to_image(pd.DataFrame(selected_loaded))
+    # if convert_to_image:
+    #     selected_loaded = convert_wav_to_image(pd.dataframe(selected_loaded))
 
     # selected_label = tf.keras.utils.to_categorical(selected_label, num_classes = 12)
     X, y = shuffle(selected_loaded, selected_label)
@@ -154,6 +157,9 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
         if len(samples) != sample_rate:
             to_delete.append(i)
             continue
+        else:
+            samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
+            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose()
         all_loaded.append(samples)
         
     all_label = [j for i, j in enumerate(all_label) if i not in to_delete]
@@ -172,8 +178,8 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
         temp.append(label_value[l])
     all_label = np.array(temp).reshape(-1,1)
 
-    if convert_to_image:
-        all_loaded = convert_wav_to_image(pd.DataFrame(all_loaded))
+    # if convert_to_image:
+    #     all_loaded = convert_wav_to_image(pd.Dataframe(all_loaded))
 
     # all_label = tf.keras.utils.to_categorical(all_label, num_classes = 12)
     X, y = shuffle(all_loaded, all_label)
