@@ -82,17 +82,17 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     to_delete = []
     for i, wav in enumerate(selected_wav):
         samples, sr = librosa.load(wav, sr = sample_rate)
-        if sr != sample_rate:
-            samples = librosa.resample(samples, orig_sr=sr, target_sr=sample_rate)
         if selected_label[i] == 'silence':
             start_idx = random.randint(0, len(samples)- 1 - sample_rate)
             samples = samples[start_idx:(start_idx + sample_rate)]
+        if sr != sample_rate:
+            samples = librosa.resample(samples, orig_sr=sr, target_sr=sample_rate)
         if len(samples) != sample_rate:
             to_delete.append(i)
             continue
         else:
             samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
-            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose()
+            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose() #TODO: Do zastanowienia?
         selected_loaded.append(samples)
 
     selected_label = [j for i, j in enumerate(selected_label) if i not in to_delete]
@@ -152,11 +152,11 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
     to_delete = []
     for i, wav in enumerate(all_wav):
         samples, sr = librosa.load(wav, sr = sample_rate)
-        if sr != sample_rate:
-            samples = librosa.resample(samples, sr, sample_rate)
         if len(samples) != sample_rate:
             to_delete.append(i)
             continue
+        if sr != sample_rate:
+            samples = librosa.resample(samples, sr, sample_rate)
         else:
             samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
             samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose()

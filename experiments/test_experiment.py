@@ -87,24 +87,28 @@ for i, config in enumerate(configs):
     print(f"---------------\nConfig {i+1}/{l}\n---------------\n\n")
     print('Running config:', config, "\n")
 
-    train_dataset = make_train_dataset(**config['dataloader'])
+    X_t, y_t = make_train_dataset(**base_config['dataloader'])
     print('--- Training data loaded ---\n')
-    val_dataset = make_val_dataset(**config['dataloader'])
+    X_v, y_v = make_val_dataset(**base_config['dataloader'])
     print('--- Validation data loaded ---\n')
 
-    # input_shape = next(iter(train_dataset))[0].shape[1:]
-    input_shape = (16000)
+    input_shape = X_t.shape[1:]
+    # input_shape = (None, 8000)
 
     model = TestGRU(input_shape=input_shape, output_nodes=config['other']['num_classes'], dropout=config["training"]['dropout'])
+
     model.compile(**config["compile"])
     earlystopper = EarlyStopping(**config["early_stopper"])
     checkpointer = ModelCheckpoint(NAME+'.h5', **config["checkpointer"])
     lrate = config["scheduler"]
 
     history = model.fit(
-                x=train_dataset, 
+                X_t,
+                y_t,
                 epochs=config['training']['n_epochs'],
-                validation_data=val_dataset,
+                validation_data=(X_v, y_v),
+                batch_size=config['dataloader']['batch_size'],
+                shuffle=True,
                 callbacks=[
                     earlystopper, 
                     checkpointer, 
