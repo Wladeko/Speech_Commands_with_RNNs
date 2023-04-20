@@ -122,7 +122,7 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
     for direct in dirs:
         waves = [f for f in os.listdir(join(train_audio_path, direct)) if f.endswith('.wav')]
         for wav in waves:
-            wav_pth = os.path.join(train_audio_path, direct, wav)
+            wav_pth = os.path.join(train_audio_path, direct, wav, wav)
             if direct in unknown_list:
                 unknown_wav.append(wav_pth)
             else:
