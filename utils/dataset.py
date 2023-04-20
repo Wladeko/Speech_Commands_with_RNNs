@@ -100,7 +100,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     if convert_to_image:
         train_data = convert_wav_to_image(pd.dataframe(selected_loaded))
 
-    dataset = tf.data.Dataset.from_tensor_slices((train_data, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
+    dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
     return dataset
 
 
@@ -153,9 +153,9 @@ def make_val_dataset(path='./data/train/audio/', unknown_silence_samples = 2000,
     all_label = np.array(temp)
 
     if convert_to_image:
-        train_data = convert_wav_to_image(pd.dataframe(all_loaded))
+        all_loaded = convert_wav_to_image(pd.dataframe(all_loaded))
 
-    dataset = tf.data.Dataset.from_tensor_slices((train_data, all_label)).shuffle(buffer_size=len(all_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
+    dataset = tf.data.Dataset.from_tensor_slices((all_loaded, all_label)).shuffle(buffer_size=len(all_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
     return dataset
 
 if __name__ == "__main__":
