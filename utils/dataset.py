@@ -79,11 +79,20 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     selected_label = known_label + unknown_sample_label + silence_sample_label
 
     selected_loaded = []
-    for wav in selected_wav:
+    to_delete = []
+    for i, wav in enumerate(selected_wav):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if sr != sample_rate:
-            samples = librosa.resample(samples, sr, sample_rate)
+            samples = librosa.resample(samples, orig_sr=sr, target_sr=sample_rate)
+        if selected_label[i] == 'silence':
+            start_idx = random.randint(0, len(samples)- 1 - sample_rate)
+            samples = samples[start_idx:(start_idx + sample_rate)]
+        if len(samples) != sample_rate:
+            to_delete.append(i)
+            continue
         selected_loaded.append(samples)
+
+    selected_label = [j for i, j in enumerate(selected_label) if i not in to_delete]
 
     selected_loaded = np.array(selected_loaded)
 
@@ -97,15 +106,16 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     temp = []
     for l in selected_label:
         temp.append(label_value[l])
-    selected_label = np.array(temp)
+    selected_label = np.array(temp).reshape(-1,1)
 
     if convert_to_image:
         selected_loaded = convert_wav_to_image(pd.dataframe(selected_loaded))
 
     # selected_label = tf.keras.utils.to_categorical(selected_label, num_classes = 12)
     X, y = shuffle(selected_loaded, selected_label)
-    # dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
-    return X, y.astype(int)
+
+    # dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=False).batch(batch_size=batch_size)
+    return X, y
 
 
 def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, sample_rate=8000, convert_to_image=False, seed=0, batch_size=128):
@@ -136,13 +146,19 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
     all_label = known_label + unknown_label
 
     all_loaded = []
-    for wav in all_wav:
+    to_delete = []
+    for i, wav in enumerate(all_wav):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if sr != sample_rate:
             samples = librosa.resample(samples, sr, sample_rate)
+        if len(samples) != sample_rate:
+            to_delete.append(i)
+            continue
         all_loaded.append(samples)
+        
+    all_label = [j for i, j in enumerate(all_label) if i not in to_delete]
 
-    all_loaded = np.array(all_loaded)
+    all_loaded = np.stack(all_loaded, axis=0)
 
     label_value = target_list
     label_value.append('unknown')
@@ -154,15 +170,15 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
     temp = []
     for l in all_label:
         temp.append(label_value[l])
-    all_label = np.array(temp)
+    all_label = np.array(temp).reshape(-1,1)
 
     if convert_to_image:
         all_loaded = convert_wav_to_image(pd.dataframe(all_loaded))
 
     # all_label = tf.keras.utils.to_categorical(all_label, num_classes = 12)
-    X, y = shuffle(all_label, all_label)
+    X, y = shuffle(all_loaded, all_label)
     # dataset = tf.data.Dataset.from_tensor_slices((all_loaded, all_label)).shuffle(buffer_size=len(all_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
-    return X, y.astype(int)
+    return X, y
 
 if __name__ == "__main__":
     dataset = make_val_dataset(convert_to_image=True)
