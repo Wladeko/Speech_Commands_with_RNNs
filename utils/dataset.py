@@ -8,6 +8,8 @@ import tensorflow as tf
 import random
 import librosa
 
+from sklearn.utils import shuffle
+
 np.seterr(all="ignore")
 
 def audio2mel(path):
@@ -95,13 +97,15 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     temp = []
     for l in selected_label:
         temp.append(label_value[l])
-    selected_label = np.array(temp)
+    selected_label = np.array(temp).reshape(-1,1)
 
     if convert_to_image:
-        train_data = convert_wav_to_image(pd.dataframe(selected_loaded))
+        selected_loaded = convert_wav_to_image(pd.dataframe(selected_loaded))
 
-    dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
-    return dataset
+    # selected_label = tf.keras.utils.to_categorical(selected_label, num_classes = 12)
+    X, y = shuffle(selected_loaded, selected_label)
+    # dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
+    return X, y
 
 
 def make_val_dataset(path='./data/train/audio/', unknown_silence_samples = 2000, sample_rate=8000, convert_to_image=False, seed=0, batch_size=128):
@@ -155,8 +159,10 @@ def make_val_dataset(path='./data/train/audio/', unknown_silence_samples = 2000,
     if convert_to_image:
         all_loaded = convert_wav_to_image(pd.dataframe(all_loaded))
 
-    dataset = tf.data.Dataset.from_tensor_slices((all_loaded, all_label)).shuffle(buffer_size=len(all_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
-    return dataset
+    # all_label = tf.keras.utils.to_categorical(all_label, num_classes = 12)
+    X, y = shuffle(all_label, all_label)
+    # dataset = tf.data.Dataset.from_tensor_slices((all_loaded, all_label)).shuffle(buffer_size=len(all_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
+    return X, y
 
 if __name__ == "__main__":
     dataset = make_val_dataset(convert_to_image=True)
