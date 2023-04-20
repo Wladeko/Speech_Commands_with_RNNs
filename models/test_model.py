@@ -13,7 +13,7 @@ class TestGRU(tf.keras.Model):
         # self.GRU2 = GRU(128, return_sequences=True)
         # self.dropout2 = Dropout(dropout)
         # self.GRU3 = GRU(256)
-        self.dense1 = Dense(256)
+        self.dense1 = Dense(128)
         self.dropout3 = Dropout(dropout)
         self.dense2 = Dense(output_nodes)
         self.activation = Activation('softmax')
