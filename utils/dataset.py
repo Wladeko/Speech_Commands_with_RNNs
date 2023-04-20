@@ -85,7 +85,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
             samples = librosa.resample(samples, sr, sample_rate)
         selected_loaded.append(samples)
 
-    selected_loaded = np.array(selected_loaded).reshape(-1,1)
+    selected_loaded = np.array(selected_loaded)
 
     label_value = target_list
     label_value.append('unknown')
@@ -97,7 +97,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     temp = []
     for l in selected_label:
         temp.append(label_value[l])
-    selected_label = np.array(temp).reshape(-1,1)
+    selected_label = np.array(temp)
 
     if convert_to_image:
         selected_loaded = convert_wav_to_image(pd.dataframe(selected_loaded))
@@ -108,7 +108,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
     return X, y
 
 
-def make_val_dataset(path='./data/train/audio/', unknown_silence_samples = 2000, sample_rate=8000, convert_to_image=False, seed=0, batch_size=128):
+def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, sample_rate=8000, convert_to_image=False, seed=0, batch_size=128):
     train_audio_path = path
     dirs = [f for f in os.listdir(train_audio_path) if isdir(join(train_audio_path, f))]
     dirs.sort()
@@ -142,7 +142,7 @@ def make_val_dataset(path='./data/train/audio/', unknown_silence_samples = 2000,
             samples = librosa.resample(samples, sr, sample_rate)
         all_loaded.append(samples)
 
-    all_loaded = np.array(all_loaded).reshape(-1,1)
+    all_loaded = np.array(all_loaded)
 
     label_value = target_list
     label_value.append('unknown')
