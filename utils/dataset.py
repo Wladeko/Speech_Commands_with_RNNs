@@ -83,7 +83,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
 
     selected_loaded = []
     to_delete = []
-    for i, wav in tqdm(enumerate(selected_wav), desc="Training dataset"):
+    for i, wav in tqdm(enumerate(selected_wav), desc="Training dataset", total=len(selected_wav)):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if selected_label[i] == 'silence':
             start_idx = random.randint(0, len(samples)- 1 - sample_rate)
@@ -154,7 +154,7 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
 
     all_loaded = []
     to_delete = []
-    for i, wav in tqdm(enumerate(all_wav), desc="Validation dataset"):
+    for i, wav in tqdm(enumerate(all_wav), desc="Validation dataset", total=len(all_wav)):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if len(samples) != sample_rate:
             to_delete.append(i)
@@ -197,6 +197,10 @@ if __name__ == "__main__":
 
     X_t, y_t = make_train_dataset()
     X_v, y_v = make_val_dataset()
+    # X_t = np.random.randint(0, 1, (50,20))
+    # y_t = X_t
+    # X_v = X_t
+    # y_v = X_t
 
     SAVE_PTH = ".\\saved_data\\"
     np.save(SAVE_PTH + "X_t.npy", X_t)
