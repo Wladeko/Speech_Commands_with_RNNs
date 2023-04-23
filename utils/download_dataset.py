@@ -10,7 +10,7 @@ data_path = 'data/train/audio'
 data_dir = pathlib.Path(data_path)
 if not data_dir.exists():
   tf.keras.utils.get_file(
-      origin="https://storage.googleapis.com/kagglesdsdata/competitions/7634/46676/train.7z?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1682110428&Signature=cq%2FPQDH8watXYiVGtl2xPd0cRyHkS3F4QyPYFhn6GtyZ85MJueaOUnWhcn1lzww%2BCkwbUvDXhrpqJ4EYmh%2F6tsicinc%2FC08ZyvZ1SkPDC26yQvSGsLvjuX5PVeNT2ucFL1WaFUlXsyHX9KbqgsOeNgqO5nzsLAyJLTyLDrTKsQmxq4v4r8ryAgrXB4NZCQR%2BYeZJEU8A2oWvmkHo9vtaa7xPtSmqs%2Flm2bKvQq3Fjcl8r8%2BTFJwjBDwgfSFKzpD8QJ4OXOh2x%2FEDVptrJAbQ5LiH5K8JydEnWBtyBLUHxTJg%2Bl5pH%2Flku1votcwMMFpHFPZl3u5PopYfq%2Fye6%2FxfwA%3D%3D&response-content-disposition=attachment%3B+filename%3Dtrain.7z",
+      origin="https://storage.googleapis.com/kagglesdsdata/competitions/7634/46676/train.7z?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1682509177&Signature=jTadfpVkkZ2N5%2F8ExD7l5lB3sMxRPoteX6WbArpcnr%2BLyqb%2BW9ls4TvgszlpwgKS3KFVe3SuO6EC7jv5W%2FTPB935Vj6FRVZbg97NJlJwEusK2eggn%2FdVZNYEwEVO%2BcfoSZB4HQ3wGuo3oHO5OVVpWSCwgdxOZ%2B8fDjHf9r0oUUvc3EoF4B4pyw7b9jCpjxUG4UoKFNOoWH1ckXwilqK9lMS5paJYfF1Wja0HL2tcRPiHW2m9ooGrzGEL5pYdMYjucuohLTnt%2BJ5qV71CETkbamDsQsZ4GSqlUsK4yeGu1iY2CsJ8AswA%2FL8Zi2qHyi480%2BBzJn1XQJNslKeSA1MDmQ%3D%3D&response-content-disposition=attachment%3B+filename%3Dtrain.7z",
       cache_dir='.', cache_subdir='data')
 Archive('data/train.7z').extractall("data")
   
