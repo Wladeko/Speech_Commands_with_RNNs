@@ -202,7 +202,7 @@ if __name__ == "__main__":
     # X_v = X_t
     # y_v = X_t
 
-    SAVE_PTH = ".\\saved_data\\"
+    SAVE_PTH = "./saved_data/"
     np.save(SAVE_PTH + "X_t.npy", X_t)
     np.save(SAVE_PTH + "y_t.npy", y_t)
     np.save(SAVE_PTH + "X_v.npy", X_v)
