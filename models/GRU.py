@@ -10,12 +10,12 @@ def GRU(X_t, y_t, dropout):
         input_shape=X.shape[1:],
         return_sequences=True
     ))
-    model.add(Dropout(0.5))
+    model.add(Dropout(dropout))
     model.add(GRU(128, return_sequences=True))
-    model.add(Dropout(0.5))
+    model.add(Dropout(dropout))
     model.add(GRU(128))
     model.add(Dense(128))
-    model.add(Dropout(0.5))
+    model.add(Dropout(dropout))
     model.add(Dense(y.shape[1]))
     model.add(Activation('softmax'))
 

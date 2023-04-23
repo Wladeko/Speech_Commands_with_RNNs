@@ -32,12 +32,12 @@ def CNN_LSTM(X_t, y_t, dropout):
     x = L.Conv2D(20, (5, 1), activation='relu', padding='same')(x)
     x = L.BatchNormalization()(x)
     x = L.MaxPooling2D((2, 1))(x)
-    x = L.Dropout(0.1)(x)
+    x = L.Dropout(dropout)(x)
 
     x = L.Conv2D(40, (3, 3), activation='relu', padding='same')(x)
     x = L.BatchNormalization()(x)
     x = L.MaxPooling2D((2, 2))(x)
-    x = L.Dropout(0.1)(x)
+    x = L.Dropout(dropout)(x)
 
     x = L.Conv2D(1, (5, 1), activation='relu', padding='same')(x)
     x = L.BatchNormalization()(x)
