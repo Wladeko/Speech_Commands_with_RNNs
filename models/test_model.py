@@ -1,38 +1,23 @@
-import tensorflow as tf
-from keras.layers import Dropout, Dense, Activation, BatchNormalization, GRU, InputLayer, Reshape
+from keras import Sequential
+from keras.layers import LSTM, Dropout, Dense, Activation, BatchNormalization
+from sklearn.preprocessing import OneHotEncoder
 
-class TestGRU(tf.keras.Model):
 
-    def __init__(self, input_shape, output_nodes, dropout):
-        super().__init__()
-        self.input1 = InputLayer(input_shape=input_shape)
-        # self.reshape1 = Reshape((input_shape, 1))
-        self.normalization = BatchNormalization()
-        self.GRU1 = GRU(128, return_sequences=True)
-        self.dropout1 = Dropout(dropout)
-        # self.GRU2 = GRU(128, return_sequences=True)
-        # self.dropout2 = Dropout(dropout)
-        # self.GRU3 = GRU(256)
-        self.dense1 = Dense(128)
-        self.dropout3 = Dropout(dropout)
-        self.dense2 = Dense(output_nodes)
-        self.activation = Activation('softmax')
+def get_test_model(input_shape, dropout=0.3, num_classes=12):
+    model = Sequential()
+    model.add(BatchNormalization())
+    model.add(LSTM(
+        256,
+        input_shape=input_shape,
+        return_sequences=True
+    ))
+    model.add(Dropout(dropout))
+    model.add(LSTM(512, return_sequences=True))
+    model.add(Dropout(dropout))
+    model.add(LSTM(256))
+    model.add(Dense(256))
+    model.add(Dropout(dropout))
+    model.add(Dense(num_classes))
+    model.add(Activation('softmax'))
 
-    def call(self, inputs, training=False):
-        x = self.input1(inputs)
-        # x = self.reshape1(x)
-        x = self.normalization(x)
-        x = self.GRU1(x)
-        if training:
-            x = self.dropout1(x, training=training)
-        # x = self.GRU2(x)
-        # if training:
-        #     x = self.dropout2(x, training=training)
-        # x = self.GRU3(x)
-        x = self.dense1(x)
-        if training:
-            x = self.dropout3(x, training=training)
-        x = self.dense2(x)
-        x = self.activation(x)
-    
-        return x
+    return model
