@@ -6,7 +6,8 @@ from keras import backend
 def CNN_LSTM1(input_shape, output_nodes=12, dropout=0.3):
     ## CNN
     model = Sequential()
-    model.add(Conv2D(20, (5, 1), input_shape=input_shape, activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(Conv2D(20, (5, 1), input_shape=(input_shape[0], input_shape[1], 1), activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 1)))
     model.add(Dropout(dropout))
