@@ -10,6 +10,7 @@ import librosa
 
 from sklearn.utils import shuffle
 from keras.utils import to_categorical
+from tqdm import tqdm
 
 
 np.seterr(all="ignore")
@@ -82,7 +83,7 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
 
     selected_loaded = []
     to_delete = []
-    for i, wav in enumerate(selected_wav):
+    for i, wav in tqdm(enumerate(selected_wav), desc="Training dataset"):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if selected_label[i] == 'silence':
             start_idx = random.randint(0, len(samples)- 1 - sample_rate)
@@ -153,7 +154,7 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
 
     all_loaded = []
     to_delete = []
-    for i, wav in enumerate(all_wav):
+    for i, wav in tqdm(enumerate(all_wav), desc="Validation dataset"):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if len(samples) != sample_rate:
             to_delete.append(i)
