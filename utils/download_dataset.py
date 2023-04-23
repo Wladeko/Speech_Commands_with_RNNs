@@ -23,7 +23,7 @@ if not isExist:
   os.makedirs(val_path) 
   val_file = open('data/train/validation_list.txt', 'r')
   val_count = 0
-  for line in tqdm(val_file, desc="Validation files", total=len(val_file.readlines())):
+  for line in val_file:
     src_path = "data/train/audio/"+line.strip()
     dst_path = "data/val/audio/"+line.strip()
     if not os.path.exists(dst_path):
@@ -41,7 +41,7 @@ if not isExist:
   os.makedirs(test_path) 
   test_file = open('data/train/testing_list.txt', 'r')
   test_count = 0
-  for line in tqdm(test_file, desc="Test files", total=len(test_file.readlines())):
+  for line in test_file:
     src_path = "data/train/audio/"+line.strip()
     dst_path = "data/test/audio/"+line.strip()
     if not os.path.exists(dst_path):
