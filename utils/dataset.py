@@ -9,6 +9,8 @@ import random
 import librosa
 
 from sklearn.utils import shuffle
+from keras.utils import to_categorical
+
 
 np.seterr(all="ignore")
 
@@ -116,9 +118,10 @@ def make_train_dataset(path='./data/train/audio/', sample_rate=8000, unknown_sil
 
     # selected_label = tf.keras.utils.to_categorical(selected_label, num_classes = 12)
     X, y = shuffle(selected_loaded, selected_label)
+    y_ohe = to_categorical(y)
 
     # dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=False).batch(batch_size=batch_size)
-    return X, y
+    return X, y_ohe
 
 
 def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, sample_rate=8000, convert_to_image=False, seed=0, batch_size=128):
@@ -183,9 +186,19 @@ def make_val_dataset(path='./data/val/audio/', unknown_silence_samples = 2000, s
 
     # all_label = tf.keras.utils.to_categorical(all_label, num_classes = 12)
     X, y = shuffle(all_loaded, all_label)
+    y_ohe = to_categorical(y)
     # dataset = tf.data.Dataset.from_tensor_slices((all_loaded, all_label)).shuffle(buffer_size=len(all_label), seed=seed, reshuffle_each_iteration=True).batch(batch_size=batch_size)
-    return X, y
+    return X, y_ohe
 
 if __name__ == "__main__":
-    dataset = make_val_dataset(convert_to_image=True)
-    print(dataset)
+    from utils import set_seeds
+    set_seeds(0)
+
+    X_t, y_t = make_train_dataset()
+    X_v, y_v = make_val_dataset()
+
+    SAVE_PTH = ".\\saved_data\\"
+    np.save(SAVE_PTH + "X_t.npy", X_t)
+    np.save(SAVE_PTH + "y_t.npy", y_t)
+    np.save(SAVE_PTH + "X_v.npy", X_v)
+    np.save(SAVE_PTH + "y_v.npy", y_v)

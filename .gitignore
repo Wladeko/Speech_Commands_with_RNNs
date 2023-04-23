@@ -3,6 +3,7 @@
 .DS_Store
 /data/*
 /venv
+/saved_data/*.npy
 
 
 # Byte-compiled / optimized / DLL files
