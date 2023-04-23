@@ -1,8 +1,8 @@
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import LSTM, Dropout, Dense, Activation, BatchNormalization
-from sklearn.preprocessing import OneHotEncoder
+from keras import Sequential
+from keras.layers import LSTM, Dropout, Dense, Activation, BatchNormalization
 
-def LSTM1(input_shape, output_nodes, dropout):
+
+def LSTM1(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(LSTM(256,input_shape=input_shape,return_sequences=True))
@@ -13,7 +13,7 @@ def LSTM1(input_shape, output_nodes, dropout):
     model.add(Activation('softmax'))
     return model
 
-def LSTM2(input_shape, output_nodes, dropout):
+def LSTM2(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(LSTM(256, input_shape=input_shape,return_sequences=True))
@@ -27,7 +27,7 @@ def LSTM2(input_shape, output_nodes, dropout):
     model.add(Activation('softmax'))
     return model
 
-def LSTM3(input_shape, output_nodes, dropout):
+def LSTM3(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(LSTM(512, input_shape=input_shape,return_sequences=True))

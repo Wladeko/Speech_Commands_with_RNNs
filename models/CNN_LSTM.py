@@ -1,11 +1,11 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dropout, Dense, Activation, BatchNormalization, Permute, Conv2D, MaxPooling2D
-from kapre.utils import Normalization2D
+from keras.models import Sequential
+from keras.layers import LSTM, Dropout, Dense, BatchNormalization, Conv2D, MaxPooling2D, Lambda
+from keras import backend
 
-def CNN_LSTM1(input_shape, output_nodes, dropout):
+
+def CNN_LSTM1(input_shape, output_nodes=12, dropout=0.3):
     ## CNN
     model = Sequential()
-    model.add(Normalization2D())
     model.add(Conv2D(20, (5, 1), input_shape=input_shape, activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 1)))
@@ -18,7 +18,7 @@ def CNN_LSTM1(input_shape, output_nodes, dropout):
     model.add(BatchNormalization())
     
     ## LSTM
-    model.add(Lambda(lambda x: K.squeeze(x, -1), name='sqeeze_last_dim'))
+    model.add(Lambda(lambda x: backend.squeeze(x, -1), name='sqeeze_last_dim'))
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64, return_sequences=True))
     model.add(Lambda(lambda q: q[:, -1]))

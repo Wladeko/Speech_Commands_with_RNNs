@@ -1,8 +1,8 @@
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dropout, Dense, Activation, BatchNormalization
-from sklearn.preprocessing import OneHotEncoder
+from keras import Sequential
+from keras.layers import Dropout, Dense, Activation, BatchNormalization, GRU
 
-def GRU1(input_shape, output_nodes, dropout):
+
+def GRU1(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(GRU(128, input_shape=input_shape, return_sequences=True))
@@ -14,7 +14,7 @@ def GRU1(input_shape, output_nodes, dropout):
     return model
 
 
-def GRU2(input_shape, output_nodes, dropout):
+def GRU2(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(GRU(256, input_shape=input_shape, return_sequences=True))
@@ -28,7 +28,7 @@ def GRU2(input_shape, output_nodes, dropout):
     model.add(Activation('softmax'))
     return model
 
-def GRU3(input_shape, output_nodes, dropout):
+def GRU3(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(GRU(512, input_shape=input_shape, return_sequences=True))

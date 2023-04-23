@@ -1,8 +1,8 @@
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import SimpleRNN, Dropout, Dense, Activation, BatchNormalization
+from keras import Sequential
+from keras.layers import SimpleRNN, Dropout, Dense, Activation, BatchNormalization
 from sklearn.preprocessing import OneHotEncoder
 
-def simpleRNN1(input_shape, output_nodes, dropout):
+def simpleRNN1(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(SimpleRNN(128, input_shape=input_shape, return_sequences=True))
@@ -14,7 +14,7 @@ def simpleRNN1(input_shape, output_nodes, dropout):
 
     return model
 
-def simpleRNN2(input_shape, output_nodes, dropout):
+def simpleRNN2(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(SimpleRNN(128, input_shape=input_shape, return_sequences=True))
@@ -29,7 +29,7 @@ def simpleRNN2(input_shape, output_nodes, dropout):
 
     return model
 
-def simpleRNN3(input_shape, output_nodes, dropout):
+def simpleRNN3(input_shape, output_nodes=12, dropout=0.3):
     model = Sequential()
     model.add(BatchNormalization())
     model.add(SimpleRNN(256, input_shape=input_shape, return_sequences=True))
