@@ -34,7 +34,7 @@ if not isExist:
   print("Moved {} files to the validation directory".format(val_count))
 
 # Moving test files
-test_path = 'data/test/audio' 
+test_path = 'data/test_small/audio' 
 test_dir = pathlib.Path(test_path)
 isExist = os.path.exists(test_path)
 if not isExist:
