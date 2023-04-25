@@ -393,16 +393,30 @@ if __name__ == "__main__":
     from utils import set_seeds
     set_seeds(0)
 
-    X_t, y_t = make_train_dataset()
-    X_v, y_v = make_val_dataset()
-    X_test, y_test = make_test_dataset()
+    input = input("[1] train [2] retrain: ")
+    if input == 'i':
+        X_t, y_t = make_train_dataset()
+        X_v, y_v = make_val_dataset()
+        X_test, y_test = make_test_dataset()
 
-    SAVE_PTH = "./saved_data/"
-    np.save(SAVE_PTH + "X_t.npy", X_t)
-    np.save(SAVE_PTH + "y_t.npy", y_t)
-    np.save(SAVE_PTH + "X_v.npy", X_v)
-    np.save(SAVE_PTH + "y_v.npy", y_v)
-    np.save(SAVE_PTH + "X_test.npy", X_test)
-    np.save(SAVE_PTH + "y_test.npy", y_test)
+        SAVE_PTH = "./saved_data/"
+        np.save(SAVE_PTH + "X_t.npy", X_t)
+        np.save(SAVE_PTH + "y_t.npy", y_t)
+        np.save(SAVE_PTH + "X_v.npy", X_v)
+        np.save(SAVE_PTH + "y_v.npy", y_v)
+        np.save(SAVE_PTH + "X_test.npy", X_test)
+        np.save(SAVE_PTH + "y_test.npy", y_test)
+    elif input == '2':
+        X_t, y_t = make_whole_train_dataset()
+        X_v, y_v = make_val_dataset()
+        X_test, y_test = make_whole_test_dataset()
+
+        SAVE_PTH = "./saved_data/"
+        np.save(SAVE_PTH + "X_t.npy", X_t)
+        np.save(SAVE_PTH + "y_t.npy", y_t)
+        np.save(SAVE_PTH + "X_v.npy", X_v)
+        np.save(SAVE_PTH + "y_v.npy", y_v)
+        np.save(SAVE_PTH + "X_test.npy", X_test)
+        np.save(SAVE_PTH + "y_test.npy", y_test)
 
 
