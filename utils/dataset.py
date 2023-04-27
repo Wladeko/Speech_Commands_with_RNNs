@@ -353,16 +353,16 @@ def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
     known_label = []
     target_list = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
 
-    background = [f for f in os.listdir(join(train_audio_path, '_background_noise_')) if f.endswith('.wav')]
-    background_wav = []
-    for wav in background : 
-        wav_pth = os.path.join(train_audio_path, '_background_noise_', wav)
-        background_wav.append(wav_pth)
+    # background = [f for f in os.listdir(join(train_audio_path, '_background_noise_')) if f.endswith('.wav')]
+    # background_wav = []
+    # for wav in background : 
+    #     wav_pth = os.path.join(train_audio_path, '_background_noise_', wav)
+    #     background_wav.append(wav_pth)
 
     for direct in dirs:
         waves = [f for f in os.listdir(direct) if f.endswith('.wav')]
         for wav in waves:
-            wav_pth = os.path.join(train_audio_path, direct, wav)
+            wav_pth = os.path.join(direct, wav)
             known_wav.append(wav_pth)
             known_label.append(wav)
 
@@ -370,16 +370,15 @@ def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
 
     selected_loaded = []
     to_delete = []
-    for i, wav in tqdm(enumerate(selected_wav), desc="Training dataset", total=len(selected_wav)):
+    for i, wav in tqdm(enumerate(selected_wav), desc="Test dataset", total=len(selected_wav)):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if sr != sample_rate:
             samples = librosa.resample(samples, orig_sr=sr, target_sr=sample_rate)
-        if len(samples) != sample_rate:
-            to_delete.append(i)
-            continue
-        else:
-            samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
-            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose() #TODO: Do zastanowienia?
+        # if len(samples) != sample_rate:
+        #     to_delete.append(i)
+        #     continue
+        samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
+        samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose() #TODO: Do zastanowienia?
         selected_loaded.append(samples)
 
     selected_loaded = np.array(selected_loaded)
@@ -394,7 +393,7 @@ if __name__ == "__main__":
     set_seeds(0)
 
     input = input("[1] train [2] retrain: ")
-    if input == 'i':
+    if input == '1':
         X_t, y_t = make_train_dataset()
         X_v, y_v = make_val_dataset()
         X_test, y_test = make_test_dataset()
@@ -407,15 +406,15 @@ if __name__ == "__main__":
         np.save(SAVE_PTH + "X_test.npy", X_test)
         np.save(SAVE_PTH + "y_test.npy", y_test)
     elif input == '2':
-        X_t, y_t = make_whole_train_dataset()
-        X_v, y_v = make_val_dataset()
+        # X_t, y_t = make_whole_train_dataset()
+        # X_v, y_v = make_val_dataset()
         X_test, y_test = make_whole_test_dataset()
 
         SAVE_PTH = "./saved_data/"
-        np.save(SAVE_PTH + "X_t.npy", X_t)
-        np.save(SAVE_PTH + "y_t.npy", y_t)
-        np.save(SAVE_PTH + "X_v.npy", X_v)
-        np.save(SAVE_PTH + "y_v.npy", y_v)
+        # np.save(SAVE_PTH + "X_t.npy", X_t)
+        # np.save(SAVE_PTH + "y_t.npy", y_t)
+        # np.save(SAVE_PTH + "X_v.npy", X_v)
+        # np.save(SAVE_PTH + "y_v.npy", y_v)
         np.save(SAVE_PTH + "X_test.npy", X_test)
         np.save(SAVE_PTH + "y_test.npy", y_test)
 
