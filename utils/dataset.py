@@ -345,32 +345,23 @@ def make_whole_train_dataset(path='./data/train/audio/', sample_rate=8000, seed=
     return X, y_ohe
 
 def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
-    train_audio_path = path
-    dirs = [train_audio_path]
+    test_audio_path = path
+    dirs = [test_audio_path]
     dirs.sort()
-    
-    known_wav = []
-    known_label = []
-    target_list = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
-
-    background = [f for f in os.listdir(join(train_audio_path, '_background_noise_')) if f.endswith('.wav')]
-    background_wav = []
-    for wav in background : 
-        wav_pth = os.path.join(train_audio_path, '_background_noise_', wav)
-        background_wav.append(wav_pth)
+    wav = []
+    labels = []
 
     for direct in dirs:
         waves = [f for f in os.listdir(direct) if f.endswith('.wav')]
         for wav in waves:
-            wav_pth = os.path.join(train_audio_path, direct, wav)
-            known_wav.append(wav_pth)
-            known_label.append(wav)
+            wav_pth = os.path.join(test_audio_path, direct, wav)
+            wav.append(wav_pth)
+            labels.append(wav)
 
-    selected_wav = known_wav
-
+    selected_wav=[]
     selected_loaded = []
     to_delete = []
-    for i, wav in tqdm(enumerate(selected_wav), desc="Training dataset", total=len(selected_wav)):
+    for i, wav in tqdm(enumerate(selected_wav), desc="Test dataset", total=len(selected_wav)):
         samples, sr = librosa.load(wav, sr = sample_rate)
         if sr != sample_rate:
             samples = librosa.resample(samples, orig_sr=sr, target_sr=sample_rate)
@@ -379,13 +370,12 @@ def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
             continue
         else:
             samples = librosa.feature.melspectrogram(y=samples, sr=sample_rate, fmin=20.0, fmax=sample_rate / 2, hop_length=100)
-            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose() #TODO: Do zastanowienia?
+            samples = librosa.power_to_db(samples, ref=np.max).astype(np.float64).transpose() 
         selected_loaded.append(samples)
 
     selected_loaded = np.array(selected_loaded)
 
-    # dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=False).batch(batch_size=batch_size)
-    return selected_loaded, selected_wav
+    return selected_loaded, labels
 
 
 
