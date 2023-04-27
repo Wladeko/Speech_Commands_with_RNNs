@@ -1,1 +1,3 @@
-# Speech_Commands_with_RNNs
+# Speech Commands Recognition using Recurrent Neural Networks
+
+The aim of this raport is to present the results of a project conducted as part of the Deep Learning course at Warsaw University of Technology. The project included testing multiple Recursive Neural Network architectures on Speech Commands dataset, as a part of the Tensorflow Speech Recognition Challange: https://www.kaggle.com/c/tensorflow-speech-recognition-challenge/data.

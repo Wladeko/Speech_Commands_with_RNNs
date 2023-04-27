@@ -345,19 +345,11 @@ def make_whole_train_dataset(path='./data/train/audio/', sample_rate=8000, seed=
     return X, y_ohe
 
 def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
-    train_audio_path = path
-    dirs = [train_audio_path]
+    test_audio_path = path
+    dirs = [test_audio_path]
     dirs.sort()
-    
-    known_wav = []
-    known_label = []
-    target_list = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
-
-    # background = [f for f in os.listdir(join(train_audio_path, '_background_noise_')) if f.endswith('.wav')]
-    # background_wav = []
-    # for wav in background : 
-    #     wav_pth = os.path.join(train_audio_path, '_background_noise_', wav)
-    #     background_wav.append(wav_pth)
+    wav = []
+    labels = []
 
     for direct in dirs:
         waves = [f for f in os.listdir(direct) if f.endswith('.wav')]
@@ -368,6 +360,7 @@ def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
 
     selected_wav = known_wav
 
+    selected_wav=[]
     selected_loaded = []
     to_delete = []
     for i, wav in tqdm(enumerate(selected_wav), desc="Test dataset", total=len(selected_wav)):
@@ -383,8 +376,7 @@ def make_whole_test_dataset(path='./data/test/audio/', sample_rate=8000):
 
     selected_loaded = np.array(selected_loaded)
 
-    # dataset = tf.data.Dataset.from_tensor_slices((selected_loaded, selected_label)).shuffle(buffer_size=len(selected_label), seed=seed, reshuffle_each_iteration=False).batch(batch_size=batch_size)
-    return selected_loaded, selected_wav
+    return selected_loaded, labels
 
 
 
